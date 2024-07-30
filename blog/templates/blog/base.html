@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html> 
+<html>
+    <head>
+        <!-- This block defines a title section to be defined when extended-->
+        <title>{% block title %} {% endblock %}</title>
+        <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+    </head>
+    <!--Bod of the base html-->
+    <body>
+        <div id="content">
+            <!-- This section define a block content to be filled with 
+             html that extends the base html-->
+            {% block content %}
+
+            {% endblock content %}
+        </div>
+
+        <div id="sidebar">
+            <h2>Side Bar: My blog</h2>
+            <p>Welcome to my blog</p>
+        </div>
+    </body>
+</html>

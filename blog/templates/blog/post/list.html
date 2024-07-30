@@ -1,0 +1,27 @@
+<!--This extends the base.html file in blog templates-->
+{% extends "blog/base.html" %}
+
+<!-- This line fills the detail of the title block define in base.html-->
+{% block title %} My Own Blog {% endblock %} 
+
+<!-- This line fills the content block defined in base.html-->
+ {% block content %}
+    <h1>My Officia Blog</h1>
+    <!-- Posts is a variable sent from the list_view -->
+    {% for post in posts %}
+        <h2>
+            <!-- Define a header as link to a unique blog post with parameter id-->
+            <!-- the get_absolute_url is define in the model to return the most -->
+            <!-- preferred url for a post. The module reverse() builds this url -->
+            <!-- dynamically -->
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </h2>
+
+        <p class="date">
+            <!-- Access the publish field and author field of the blog post -->
+            Published {{ post.publish }} by {{ post.author }}
+        </p>
+
+        {{ post.body | truncatewords:30 | linebreaks }}
+    {% endfor %}
+{% endblock %}

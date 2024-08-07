@@ -1,6 +1,9 @@
 <!--This extends the base.html file in blog templates-->
 {% extends "blog/base.html" %}
 
+{% load blog_tags %}
+
+
 <!-- This line fills the detail of the title block define in base.html-->
 {% block title %} My Own Blog {% endblock %} 
 
@@ -8,10 +11,9 @@
  {% block content %}
     <h1>My Officia Blog</h1>
     <!-- tag variable sent from the list_View view -->
-    {% if tag %}
-        <h2>Posts tagged with "{{ tag.name }}"</h2>
-    {% endif %}
-    
+     {% if tag %}
+     <h2>Posts tagged with "{{ tag.name }}"</h2>
+     {% endif %}    
     <!-- Posts is a variable sent from the list_view -->
     {% for post in posts %}
         <h2>
@@ -39,7 +41,9 @@
             Published {{ post.publish }} by {{ post.author }}
         </p>
 
-        {{ post.body | truncatewords:30 | linebreaks }}
+        <!-- truncatewords : truncates a string after a certain number of words 
+         avoiding unclosed HTML tags-->
+        {{ post.body | markdown | truncatewords_html:30 | linebreaks }}
     {% endfor %}
 
     <!-- Add pagination template -->

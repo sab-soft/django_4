@@ -7,7 +7,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Post, Comment
 from .forms import EmailPostForm, CommentForm
 from django.views.decorators.http import require_POST
+
 from taggit.models import Tag
+
+from django.db.models import Count
 
 
 # List view for displaying all blog post
@@ -69,8 +72,27 @@ def post_detail(request, year, month, day, post):
     # Form for users to fill 
     form = CommentForm()
     
+    # List of similar posts
+    # Retrieve a python list of IDs for the tags of the current post (Each tag has an ID). 
+    # The values_list() QuerySet returns tuples with the values for the given 
+    # fields. Flat=True is passed to get singles values such as [1, 2, 3,...] instead
+    # of one-tules such as [(1,), (2,), (3,) ...]
+    posts_tags_ids = post.tags.values_list('id', flat=True)
+    # Get all posts containing any of this tags excluding the current post itself.
+    similar_posts = Post.published.filter(tags__in=posts_tags_ids)\
+                                    .exclude(id=post.id)
+    # Use Count aggregation function to generate a calculated field - same_tags - that 
+    # contains the number of tags shared with all the tags queried 
+    # Order the result by the number of shared tags (descending order) and by publish
+    # to dispaly recent posts first for the posts with the same number of shared tags.
+    # Slice the result to retrieve only the first four posts. 
+    similar_posts = similar_posts.annotate(same_tags=Count('tags'))\
+                                    .order_by('-same_tags', '-publish')[:4]
+
+    
     return render(request, 'blog/post/detail.html', 
-                  {'post':post, 'comments':comments})
+                  {'post':post, 'comments':comments, 'similar_posts':similar_posts})
+
 
 def post_share(request, post_id):
     # Retreive post by id

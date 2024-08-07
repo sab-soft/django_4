@@ -10,4 +10,43 @@
     </p>
 
     {{ post.body | linebreaks }}
+
+    <!-- Share this post through the dynamically built link using url tag
+    the post id is passed as a parameter to build the url -->
+    <p>
+        <a href="{% url 'blog:post_share' post.id %}">Share this post</a>
+    </p>
+
+    <!-- Add comments section 
+     Django ORM QuerySet comment.count() NOTE: djanog template language doesn't use 
+     parenthesis for calling methods. NOTE: the  with  tage allows you to 
+     assign a value to a new variable that will be available in the template until
+     the  endwith tag. 
+    -->
+    {% with comments.count as total_comments %}
+        <h2>
+            <!-- pluralize template filter is used to return a  string with the 
+            letter 's' if the value is different from 1. -->
+            {{ total_comments }} comment {{ total_comments | pluralize }}
+        </h2>
+    {% endwith %}
+    
+    <!-- For statement to loop through the post comment. -->
+    {% for comment in comments %}
+        <div class="comment">
+            <p class="info">
+                <!-- Enumerate comment with the {{ forloop.counter }} variable
+                which contains the loop counter in each iteration-->
+                Comment {{ forloop.counter }} by {{ comment.name }}
+                {{ comment.created }}
+            </p>
+                {{ comment.body|linebreaks }}
+        </div>
+
+    {% empty %}
+        <p>There are no comments.</p>
+    {% endfor %}
+
+    {% include "blog/post/includes/comment_form.html" %}
+
 {% endblock %}

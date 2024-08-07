@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email server configuration 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'amakondisamuel@gmail.com'
+EMAIL_HOST_PASSWORD ='swlr lyfx xkmn bhhd'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

@@ -21,6 +21,11 @@
         <div id="sidebar">
             <h2>Side Bar: My blog</h2>
             <p>I've written {% total_posts %} posts so far</p>
+
+            <!-- Adding an RSS feed subscription -->
+             <p>
+                <a href="{% url 'blog:post_feed '}">Kindly Subscribe to my RSS Feed</a>
+             </p>
             <!-- This tag is defined in the custome tag blog_tags with optional parameter-->
             <h3>Latest Posts</h3>
             {% show_latest_posts 3 %}

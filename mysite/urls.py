@@ -18,9 +18,19 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 
-#app_name = 'blog'
+from django.contrib.sitemaps.views import sitemap
+from blog.sitemaps import PostSitemap
 
+# Define a sitemaps dictionary. NOTE Multiple sitemaps can be define for the site.
+# this dictionary is passed to the sitemaps view define below in the url patterns 
+sitemaps = {
+    'posts': PostSitemap,
+}
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls', namespace='blog')),
+    # url pattern that matches with the sitemap.xml pattern and uses the sitemap view 
+    # provided by django. NOTE the sitemaps dictioinary is passed to the sitemap view
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, 
+         name='django.contrib.sitemaps.views.sitemap')
 ]
